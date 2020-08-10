@@ -10,6 +10,9 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                          password_confirmation: "bar" } }
     end
     assert_template 'users/new'
+    assert_select "div#error_explanation", 1
+    assert_select "div.alert", 1
+    assert_select "div.alert-danger", 1
   end
   
   test "valid signup information" do
