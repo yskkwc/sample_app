@@ -2,18 +2,18 @@ class SessionsController < ApplicationController
   def new
   end
   def create
-    @user = User.find_by(email: params[:session][:email].downcase)
-    if @user && @user.authenticate(params[:session][:password]) 
+    user = User.find_by(email: params[:session][:email].downcase)
+    if user && user.authenticate(params[:session][:password]) 
       #ユーザーがデータベースにあり(userがtrue)、かつ、
       #認証に成功した場合(user.authenticateがtrue)にのみ
       #true=Success
-      log_in(@user) 
+      log_in user
       #↑メソッド + 引数
       #セッションを取得するメソッド
       #(session[:user_id]=user.id)
       #module SessionsHelper def log_in
-      params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
-      redirect_to @user
+      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+      redirect_back_or user
     else
       #false = Fail
       #alert-class danger
