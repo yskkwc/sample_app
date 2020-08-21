@@ -1,6 +1,7 @@
 class SessionsController < ApplicationController
   def new
   end
+  
   def create
     user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password]) 
@@ -15,7 +16,7 @@ class SessionsController < ApplicationController
       else
         message = "Account not activated"
         message = "Check your email for the activation links"
-        flash[:danger] = message
+        flash[:warning] = message
         redirect_to root_url
       end
     else
@@ -28,7 +29,6 @@ class SessionsController < ApplicationController
   
   def destroy
     log_out if logged_in?
-    
     redirect_to root_url
   end
   
