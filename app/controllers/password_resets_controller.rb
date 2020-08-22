@@ -5,9 +5,6 @@ class PasswordResetsController < ApplicationController
   
   def new
   end
-
-  def edit
-  end
   
   def create
     @user = User.find_by(email: params[:password_reset][:email].downcase)
@@ -22,9 +19,12 @@ class PasswordResetsController < ApplicationController
     end
   end
   
+  def edit
+  end
+  
   def update
     if params[:user][:password].empty?
-      @user.errors.add(:password,  "can't be empty")
+      @user.errors.add(:password, :blank)
       render 'edit'
     elsif @user.update(user_params)
       log_in @user

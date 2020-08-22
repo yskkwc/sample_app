@@ -37,6 +37,7 @@ Rails.application.configure do
   host = '0605edb40cd348799396760589b8294a.vfs.cloud9.us-east-2.amazonaws.com'
   # 自分の環境のホストに変えてください。
   # クラウドIDEの場合は以下をお使いください
+  # /rails/mailers/user_mailer/password_reset
   
   config.action_mailer.default_url_options = { host: host, protocol: 'https' }
   # localhostで開発している場合は以下をお使いください
