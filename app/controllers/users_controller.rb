@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   # GET /user/:id
   def show
     @user = User.find(params[:id])
+    @microposts = @user.microposts.paginate(page: params[:page])
   end
   
   # GET /users/new
@@ -63,14 +64,6 @@ class UsersController < ApplicationController
                                   )
     end
     
-    # ログイン済みユーザーかどうか確認
-    def logged_in_user
-      unless logged_in?
-        store_location
-        flash[:danger] = "Please log in."
-        redirect_to login_url
-      end
-    end
     
     def correct_user
       #編集したいユーザを呼び出す。
