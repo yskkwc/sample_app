@@ -8,7 +8,7 @@ module SessionsHelper
       @current_user ||= User.find_by(id: user_id)
     elsif (user_id = cookies.signed[:user_id]) #ここで復元
       user = User.find_by(id: user_id)
-      if user && user.authenticated?(cookies[:remember_token])
+      if user && user.authenticated?(:remember, cookies[:remember_token])
         #userがnilじゃないかつ、authenticated?メソッドで
         #cookiesに保存していたremember_tokenが認証出来たら
         log_in user
