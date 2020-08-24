@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+<<<<<<< HEAD
   has_many :microposts, dependent: :destroy
   
   attr_accessor :remember_token, :activation_token, :reset_token
@@ -7,6 +8,11 @@ class User < ApplicationRecord
   #オブジェクトが生成された時だけ
   
   before_save{ self.email = self.email.downcase }
+=======
+  attr_accessor :remember_token, :activation_token
+  before_save :downcase_email
+  before_create :create_activation_digest
+>>>>>>> again-ch11
   
   validates :name,  presence: true, 
                     length: { maximum: 50 }
@@ -46,13 +52,14 @@ class User < ApplicationRecord
     digest = send("#{attribute}_digest")
     return false if digest.nil?
     BCrypt::Password.new(digest).is_password?(token)
-    #ここでダイジェストとトークンの認証
+
   end
   
   def forget
     self.update_attribute(:remember_digest, "ochinko")
   end
   
+  # アカウントを有効にする
   def activate
     update_attribute(:activated,    true)
     update_attribute(:activated_at, Time.zone.now)
@@ -63,38 +70,15 @@ class User < ApplicationRecord
     UserMailer.account_activation(self).deliver_now
   end
   
-  def create_reset_digest
-    self.reset_token = User.new_token
-    update_attribute(:reset_digest,  User.digest(reset_token))
-    update_attribute(:reset_sent_at, Time.zone.now)
-  end
-
-  # パスワード再設定のメールを送信する
-  def send_password_reset_email
-    UserMailer.password_reset(self).deliver_now
-  end
-  
-  def password_reset_expired?
-    reset_sent_at < 2.hours.ago
-  end
-  
-  def feed
-    Micropost.where("user_id = ?", self.id)
-  end
-  
   private
+  #####################################
   
   def downcase_email
     self.email = email.downcase
   end
   
   def create_activation_digest
-    #before_create :create_activation_digest
     self.activation_token  = User.new_token
-    #ランダムトークンを生成して返す
-    
     self.activation_digest = User.digest(activation_token)
-    #activation_digestを定義 def User.digest(string)~ user.rb
-    #ランダムトークンをさらにハッシュ化して返す
   end
 end

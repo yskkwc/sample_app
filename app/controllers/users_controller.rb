@@ -18,15 +18,15 @@ class UsersController < ApplicationController
     @user = User.new
   end
   
-  def create
+  def create #user.rb berofe_create発動
     @user = User.new(user_params)
+    #ストロングパラメータ
     if @user.save
       @user.send_activation_email
-      #このユーザーに、ここでメール送るよ
-      flash[:info] = "Please check your email to activate your account!"
+      #user.rbに記述
+      
+      flash[:info] = "Please check your email to activate your account."
       redirect_to root_url
-      #redirect_to @user
-      #GET "/users/#{@user.id}"
     else
       render 'new'
     end
