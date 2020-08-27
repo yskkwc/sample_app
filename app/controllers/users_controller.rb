@@ -50,11 +50,13 @@ class UsersController < ApplicationController
   def destroy
     User.find(params[:id]).destroy
     flash[:success] = "User deleted"
-    redirect_to user_url
+    redirect_to users_path
   end
   
   #ここより上に書く
   private
+  #####################
+  
   #ストロングパラメータ
     def user_params
       params.require(:user).permit(:name, 
@@ -64,7 +66,7 @@ class UsersController < ApplicationController
                                   )
     end
     
-    
+
     def correct_user
       #編集したいユーザを呼び出す。
       @user = User.find(params[:id])

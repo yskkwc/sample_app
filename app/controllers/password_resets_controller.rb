@@ -11,14 +11,17 @@ class PasswordResetsController < ApplicationController
     if @user
       @user.create_reset_digest
       @user.send_password_reset_email
+      #user.rbに記述
+      
       flash[:info] = "Email sent with password reset instructions"
       redirect_to root_url
     else
       flash.now[:danger] = "Email address not found"
       render 'new'
     end
+      
   end
-  
+
   def edit
   end
   
@@ -26,6 +29,9 @@ class PasswordResetsController < ApplicationController
     if params[:user][:password].empty?
       @user.errors.add(:password, :blank)
       render 'edit'
+      #ok= check expiration
+      #ok= バリデーション チェック
+      #ok= passwordがblankだった時はエラー追加してrender
     elsif @user.update(user_params)
       log_in @user
       flash[:success] = "Password has been reset."
@@ -35,13 +41,13 @@ class PasswordResetsController < ApplicationController
     end
   end
   
-private
-
-  #strong parameter permit
+  private
+  #####################
+  
   def user_params
     params.require(:user).permit(:password, :password_confirmation)
+    # update action
   end
-
   
   def get_user
     @user = User.find_by(email: params[:email])
@@ -49,13 +55,16 @@ private
   
   def valid_user
     unless (@user && @user.activated? &&
-            @user.authenticated?(:reset, params[:id]))
-      redirect_to root_url
+      @user.authenticated?(:reset, params[:id]))
+    #nil check, activated=true?, (:reset, token)=authenticated = true?
+    
+    redirect_to root_url
     end
   end
   
   def check_expiration
     if @user.password_reset_expired?
+      #期限切れですか？ user.rb
       flash[:danger] = "Password reset has expired."
       redirect_to new_password_reset_url
     end
