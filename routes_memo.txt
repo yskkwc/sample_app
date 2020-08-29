@@ -7,6 +7,7 @@ user      GET    /users/:id(.:format)      users#show
           PATCH  /users/:id(.:format)      users#update
           PUT    /users/:id(.:format)      users#update
           DELETE /users/:id(.:format)      users#destroy
-          
-edit_account_activation
-          GET    /account_activations/:id/edit(.:format)   account_activations#edit
+following_user
+          GET    /users/:id/following(.:format) users#following
+followers_user
+          GET    /users/:id/followers(.:format) users#followers
